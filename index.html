@@ -273,7 +273,7 @@ input,textarea{cursor:text!important}
         <div class="grid" id="p-comm" role="tabpanel" aria-labelledby="tab-comm"></div>
       </div>
     </div>
-    <div class="statusbar"><span id="g-count">6 object(s)</span><span>Click a rug to open it</span></div>
+    <div class="statusbar"><span id="g-count">5 object(s)</span><span>Click a rug to open it</span></div>
   </section>
 
   <!-- Viewer -->
@@ -435,23 +435,32 @@ document.querySelectorAll('svg[data-px]').forEach(s=>{s.setAttribute('viewBox','
 /* ---------- gallery data ---------- */
 const RUGS={
   comm:[
-    {f:'saints-rug-1.jpg',t:'Saints rug',c:'New Orleans · custom shaped fleur-de-lis rug',alt:'Gold, black and white Saints fleur-de-lis rug on a sidewalk'},
-    {f:'hello-kitty-rug-1.jpg',t:'Hello Kitty',c:'Character rug · custom commission',alt:'White cartoon cat character rug with a red bow and blue overalls'},
-    {f:'commission-lineup.jpg',t:'The lineup',c:'Three commissions, one hallway',alt:'Three rugs on a tile floor: a ghost mask on pink, a blue alien character, and a red heart with orange lettering'},
-    {f:'brand-107.jpg',t:'107',c:'Brand logo rug · gothic lettering in lime, white and black',alt:"Charcoal rug with a gothic '107' logo in lime green, white and black"},
-    {f:'brand-3-cross.jpg',t:'3 + Cross',c:'Brand logo rug · custom commission',alt:'Black number 3 rug with a lime green cross through it'},
-    {f:'brand-3-cross-detail.jpg',t:'3 + Cross (detail)',c:'Close-up of the pile and the clean outline',alt:'Close-up of the 3 and cross rug showing the tufted pile'}
+    {t:'Saints rug',c:'New Orleans · custom shaped fleur-de-lis rug',photos:[
+      {f:'saints-rug-1.jpg',alt:'Gold, black and white Saints fleur-de-lis rug on a sidewalk'}]},
+    {t:'Hello Kitty',c:'Character rug · custom commission',photos:[
+      {f:'hello-kitty-rug-1.jpg',alt:'Hello Kitty tufted rug in white, red and blue lying flat on a snowy lawn'},
+      {f:'hello-kitty-rug-2.jpg',alt:'Hello Kitty rug on snow with a shadow falling across the top'},
+      {f:'hello-kitty-rug-3.jpg',alt:'Hello Kitty rug photographed from the bottom, filling the frame'},
+      {f:'hello-kitty-rug-4.jpg',alt:'Hello Kitty rug at a diagonal angle showing the thick pile'},
+      {f:'hello-kitty-rug-5.jpg',alt:'Close-up of the Hello Kitty face, red bow and yellow nose in thick tufted pile'}]},
+    {t:'The lineup',c:'Three commissions, one hallway',photos:[
+      {f:'commission-lineup.jpg',alt:'Three rugs on a tile floor: a ghost mask on pink, a blue alien character, and a red heart with orange lettering'}]},
+    {t:'107',c:'Brand logo rug · gothic lettering in lime, white and black',photos:[
+      {f:'brand-107.jpg',alt:"Charcoal rug with a gothic '107' logo in lime green, white and black"}]},
+    {t:'3 + Cross',c:'Brand logo rug · custom commission',photos:[
+      {f:'brand-3-cross.jpg',alt:'Black number 3 rug with a lime green cross through it'},
+      {f:'brand-3-cross-detail.jpg',alt:'Close-up of the 3 and cross rug showing the tufted pile'}]}
   ]
 };
-let current=[],idx=0;
+let curRug=null,pi=0;
 function renderGrid(key,el){
-  el.innerHTML=RUGS[key].map((r,i)=>`<button class="thumb" data-k="${key}" data-i="${i}"><span class="ph"><img loading="lazy" src="img/${r.f}" alt="${r.alt}" onerror="this.parentElement.textContent='Photo coming soon'"></span><span class="fn">${r.f}</span><small>${r.t}</small></button>`).join('');
+  el.innerHTML=RUGS[key].map((r,i)=>{const p=r.photos[0],n=r.photos.length;return `<button class="thumb" data-k="${key}" data-i="${i}"><span class="ph"><img loading="lazy" src="img/${p.f}" alt="${p.alt}" onerror="this.parentElement.textContent='Photo coming soon'"></span><span class="fn">${p.f}</span><small>${r.t}${n>1?` · ${n} photos`:''}</small></button>`}).join('');
 }
 renderGrid('comm',document.getElementById('p-comm'));
-document.querySelectorAll('.thumb').forEach(b=>b.addEventListener('click',()=>{current=RUGS[b.dataset.k];idx=+b.dataset.i;showRug();openWin('w-viewer')}));
-function showRug(){const r=current[idx];const im=document.getElementById('v-img');im.src='img/'+r.f;im.alt=r.alt;document.getElementById('v-cap').textContent=`${r.t} · ${r.c}`;document.getElementById('t-viewer').textContent=`${r.f} - Rug Viewer`}
-document.getElementById('v-prev').onclick=()=>{idx=(idx-1+current.length)%current.length;showRug()};
-document.getElementById('v-next').onclick=()=>{idx=(idx+1)%current.length;showRug()};
+document.querySelectorAll('.thumb').forEach(b=>b.addEventListener('click',()=>{curRug=RUGS[b.dataset.k][+b.dataset.i];pi=0;showRug();openWin('w-viewer')}));
+function showRug(){const p=curRug.photos[pi],n=curRug.photos.length;const im=document.getElementById('v-img');im.src='img/'+p.f;im.alt=p.alt;document.getElementById('v-cap').textContent=`${curRug.t} · ${curRug.c}${n>1?` · photo ${pi+1} of ${n}`:''}`;document.getElementById('t-viewer').textContent=`${p.f} - Rug Viewer`;document.getElementById('v-prev').hidden=document.getElementById('v-next').hidden=n<2}
+document.getElementById('v-prev').onclick=()=>{pi=(pi-1+curRug.photos.length)%curRug.photos.length;showRug()};
+document.getElementById('v-next').onclick=()=>{pi=(pi+1)%curRug.photos.length;showRug()};
 
 /* tabs */
 const tabs=[...document.querySelectorAll('.tab')];
