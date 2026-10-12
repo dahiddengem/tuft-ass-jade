@@ -143,6 +143,27 @@ input:focus,select:focus,textarea:focus{outline:1px dotted var(--jade-deep);outl
 .note p+p{margin-top:12px}
 .sig{font:700 22px/1 var(--pixel);color:var(--jade-deep);margin-top:16px}
 
+
+/* prices */
+.calc{background:var(--face);box-shadow:var(--raised);padding:12px;display:grid;gap:10px;margin:12px 0}
+.calc-out{display:grid;grid-template-columns:1fr auto;gap:2px 12px;font-size:14px;background:#fff;box-shadow:var(--sunken);padding:10px 12px}
+.calc-out b{font-weight:700}
+.calc-out .tot{border-top:1px solid #ccc;margin-top:4px;padding-top:6px;font-weight:700}
+.tbl{width:100%;border-collapse:collapse;font-size:13px;background:#fff;box-shadow:var(--sunken)}
+.tbl th,.tbl td{padding:7px 10px;text-align:left;border-bottom:1px solid #e1e1e1}
+.tbl th{background:var(--face);font-weight:700}
+.tbl td:last-child,.tbl th:last-child,.tbl td:nth-child(2),.tbl th:nth-child(2){text-align:right;white-space:nowrap}
+.fine{font-size:12px;color:#444;margin-top:8px}
+.pol{display:grid;gap:6px;margin-top:14px}
+.pol details{background:#fff;box-shadow:var(--sunken);padding:0}
+.pol summary{cursor:pointer;padding:9px 12px;font-weight:700;font-size:14px;list-style:none;display:flex;justify-content:space-between;gap:8px}
+.pol summary::-webkit-details-marker{display:none}
+.pol summary::after{content:"+";font:700 16px/1 var(--pixel)}
+.pol details[open] summary::after{content:"–"}
+.pol summary:focus-visible{outline:1px dotted var(--jade-deep);outline-offset:-5px}
+.pol .pb{padding:2px 12px 12px;font-size:13px;line-height:1.55}
+.pol .pb p+p{margin-top:8px}
+
 /* contact */
 .contact{display:grid;gap:14px}
 .handle{font:700 28px/1 var(--pixel);color:var(--jade-deep);word-break:break-word}
@@ -231,6 +252,7 @@ input,textarea{cursor:text!important}
     <button class="icon" data-open="w-welcome"><svg data-px="gem"></svg><span>Welcome</span></button>
     <button class="icon" data-open="w-gallery"><svg data-px="folder"></svg><span>My Rugs</span></button>
     <button class="icon" data-open="w-order"><svg data-px="rug"></svg><span>Custom Order</span></button>
+    <button class="icon" data-open="w-prices"><svg data-px="coin"></svg><span>Prices</span></button>
     <button class="icon" data-open="w-about"><svg data-px="card"></svg><span>About Jade</span></button>
     <button class="icon" data-open="w-contact"><svg data-px="mail"></svg><span>Contact</span></button>
   </nav>
@@ -296,8 +318,8 @@ input,textarea{cursor:text!important}
       <h2>Turn your idea into a <span class="em">rug.</span></h2>
       <ol class="steps">
         <li><b>Send the idea</b>A logo, photo, sketch or just a vibe.</li>
-        <li><b>Get a quote</b>We lock the size, colors and price.</li>
-        <li><b>I tuft it</b>Made by hand, start to finish.</li>
+        <li><b>Get a quote</b>We lock the size, colors, price and shipping.</li>
+        <li><b>Deposit, then I tuft it</b>50% starts it. Made by hand, start to finish.</li>
         <li><b>It's yours</b>Hang it, frame it, or stand on it.</li>
       </ol>
       <form id="order-form" novalidate>
@@ -307,9 +329,11 @@ input,textarea{cursor:text!important}
           <label>Rough size
             <select name="size">
               <option>Not sure yet, help me pick</option>
-              <option>Small (around 2 ft)</option>
-              <option>Medium (around 3 ft)</option>
-              <option>Large (4 ft or bigger)</option>
+              <option>Small (up to 2 x 2 ft)</option>
+              <option>Medium (up to 3 x 3 ft)</option>
+              <option>Large (up to 4 x 4 ft)</option>
+              <option>XL (up to 5 x 5 ft)</option>
+              <option>Bigger than 5 x 5 ft</option>
             </select></label>
           <label>Need it by
             <input name="date" placeholder="e.g. Dec 1, or no rush"></label>
@@ -318,10 +342,56 @@ input,textarea{cursor:text!important}
           <input name="name" autocomplete="name" placeholder="So I know who's DMing"></label>
         <div>
           <button class="btn primary gem-cut" type="submit">Copy my request</button>
-          <p class="reassure">Nothing is charged here · You'll get a quote first</p>
+          <p class="reassure">Nothing is charged here · You'll get a quote first · <button type="button" data-open="w-prices" style="all:unset;cursor:pointer;color:var(--jade-deep);text-decoration:underline">See starting prices</button></p>
         </div>
         <div id="order-out" role="status" aria-live="polite"></div>
       </form>
+    </div>
+  </section>
+
+
+  <!-- Prices & shipping -->
+  <section class="win" id="w-prices" aria-labelledby="t-prices" data-icon="coin" data-w="600" data-h="600">
+    <div class="titlebar"><svg data-px="coin"></svg><span class="t" id="t-prices">Prices &amp; Shipping</span>
+      <div class="tbtns"><button class="tbtn" data-min aria-label="Minimize"><svg viewBox="0 0 8 7"><rect x="1" y="5" width="6" height="2"/></svg></button><button class="tbtn" data-max aria-label="Maximize"><svg viewBox="0 0 8 7"><path d="M0 0h8v7H0zM1 2v4h6V2z" fill-rule="evenodd"/></svg></button><button class="tbtn x" data-close aria-label="Close"><svg viewBox="0 0 8 7"><path d="M0 0h2v1h1v1h2V1h1V0h2v1H7v1H6v1H5v1h1v1h1v1h1v1H6V6H5V5H3v1H2v1H0V6h1V5h1V4h1V3H2V2H1V1H0z"/></svg></button></div>
+    </div>
+    <div class="body">
+      <h2>Starting <span class="em">prices.</span></h2>
+      <p style="margin-top:8px;font-size:14px">Every rug is custom, so your quote sets the final price. These are starting points for a simple design (a few colors). More colors, fine detail and odd shapes cost more.</p>
+
+      <div class="calc">
+        <label for="calc-size">Pick a size to see an estimate
+          <select id="calc-size"></select></label>
+        <div class="calc-out" id="calc-out" role="status" aria-live="polite"></div>
+      </div>
+
+      <table class="tbl" id="tiers"><caption class="fine" style="text-align:left;caption-side:bottom;padding:6px 2px 0">Shipping is estimated for the continental US and confirmed in your quote.</caption>
+        <thead><tr><th scope="col">Size</th><th scope="col">Starting at</th><th scope="col">Est. shipping</th></tr></thead>
+        <tbody></tbody>
+      </table>
+
+      <div class="pol">
+        <details open><summary>How the deposit works</summary><div class="pb">
+          <p>A <b>50% deposit</b> locks in your rug and starts the work. The rest, plus shipping, is due before it ships.</p>
+          <p>You always get a quote first. Nothing is charged until you say yes.</p>
+        </div></details>
+        <details><summary>Cancellations &amp; refunds</summary><div class="pb">
+          <p><b>Before I start tufting:</b> cancel any time and I'll refund your deposit, minus the card processing fee.</p>
+          <p><b>After I start:</b> the deposit is non-refundable, because materials are bought and the hours are in.</p>
+          <p><b>Made to order:</b> every rug is custom, so there are no returns for a change of mind.</p>
+          <p><b>If something's wrong:</b> if your rug arrives damaged or doesn't match the design you approved, message me within 7 days with photos and I'll make it right.</p>
+        </div></details>
+        <details><summary>Shipping &amp; handmade notes</summary><div class="pb">
+          <p>Shipping is estimated by size and confirmed in your quote. Once it ships, you'll get tracking.</p>
+          <p>Your timeline is set in your quote.</p>
+          <p>Every rug is made by hand, so size can vary by an inch or two and colors can look different on a screen.</p>
+        </div></details>
+      </div>
+
+      <div style="margin-top:14px">
+        <button class="btn primary gem-cut" data-open="w-order">Start a custom order</button>
+        <p class="reassure">Nothing is charged here · You'll get a quote first</p>
+      </div>
     </div>
   </section>
 
@@ -366,6 +436,7 @@ input,textarea{cursor:text!important}
   <ul>
     <li><button role="menuitem" data-open="w-gallery"><svg data-px="folder"></svg>My Rugs</button></li>
     <li><button role="menuitem" data-open="w-order"><svg data-px="rug"></svg>Custom Order</button></li>
+    <li><button role="menuitem" data-open="w-prices"><svg data-px="coin"></svg>Prices &amp; Shipping</button></li>
     <li><button role="menuitem" data-open="w-about"><svg data-px="card"></svg>About Jade</button></li>
     <li><button role="menuitem" data-open="w-contact"><svg data-px="mail"></svg>Contact</button></li>
     <li><hr></li>
@@ -426,6 +497,8 @@ const PX={
   "................",".......kk.......","......kyyk......",".....kyyyyk.....",".....kykkyk.....","....kyykkyyk....","....kyykkyyk....","...kyyykkyyyk...","...kyyyyyyyyk...","..kyyyykkyyyyk..","..kyyyykkyyyyk..",".kyyyyyyyyyyyyk.",".kkkkkkkkkkkkkk.","................","................","................"]},
   power:{p:{k:'#7a1a14',r:'#c0392b'},m:[
   "................","................",".......kk.......","...kk..kk..kk...","..krk..kk..krk..",".krk...kk...krk.",".krk...kk...krk.",".krk...kk...krk.",".krk........krk.",".krk........krk.","..krk......krk..","...kkrkkkkrkk...",".....kkkkkk.....","................","................","................"]},
+  coin:{p:{k:'#3b2f12',y:'#d4af77',Y:'#f2d98f'},m:[
+  "................","......kkkk......","....kkkyykkk....","...kkyyyyyykk...","..kkyYykyyyykk..","..kyYyykkkyyyk..",".kkyyykkyyyyykk.",".kyyyyykkyyyyyk.",".kyyyyyykkyyyyk.",".kkyyykkkyyyykk.","..kyyyykyyyyyk..","..kkyyyyyyyykk..","...kkyyyyyykk...","....kkkyykkk....","......kkkk......","................"]},
   mail:{p:{k:'#1b1712',w:'#ffffff',f:'#e6e6e6',j:'#3aa898'},m:[
   "................","................","................",".kkkkkkkkkkkkkk.",".kwkffffffffkwk.",".kwwkffffffkwwk.",".kwwwkffffkwwwk.",".kwwwwkjjkwwwwk.",".kwwwwwkkwwwwwk.",".kwwwwwwwwwwwwk.",".kwwwwwwwwwwwwk.",".kwwwwwwwwwwwwk.",".kkkkkkkkkkkkkk.","................","................","................"]}
 };
@@ -476,6 +549,25 @@ document.getElementById('v-next').onclick=()=>{pi=(pi+1)%curRug.photos.length;sh
 const tabs=[...document.querySelectorAll('.tab')];
 function selectTab(t){tabs.forEach(x=>{const on=x===t;x.setAttribute('aria-selected',on);x.tabIndex=on?0:-1;document.getElementById(x.getAttribute('aria-controls')).hidden=!on});document.getElementById('g-count').textContent=`${RUGS.comm.length} object(s)`}
 tabs.forEach((t,i)=>{t.onclick=()=>selectTab(t);t.onkeydown=e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'){const n=tabs[(i+(e.key==='ArrowRight'?1:-1)+tabs.length)%tabs.length];selectTab(n);n.focus()}}});
+
+
+/* ---------- prices & shipping estimator ---------- */
+const DEPOSIT=0.5;
+const TIERS=[
+  {id:'s', n:'Small',  d:'up to 2 × 2 ft', from:150, ship:15},
+  {id:'m', n:'Medium', d:'up to 3 × 3 ft', from:300, ship:22},
+  {id:'l', n:'Large',  d:'up to 4 × 4 ft', from:550, ship:38},
+  {id:'xl',n:'XL',     d:'up to 5 × 5 ft', from:850, ship:55}
+];
+const $$=n=>'$'+n.toLocaleString('en-US');
+document.querySelector('#tiers tbody').innerHTML=TIERS.map(t=>`<tr><td>${t.n} <small>(${t.d})</small></td><td>${$$(t.from)}</td><td>~${$$(t.ship)}</td></tr>`).join('');
+const calcSel=document.getElementById('calc-size'),calcOut=document.getElementById('calc-out');
+calcSel.innerHTML=TIERS.map(t=>`<option value="${t.id}">${t.n} (${t.d})</option>`).join('');
+function calc(){
+  const t=TIERS.find(x=>x.id===calcSel.value)||TIERS[0],dep=Math.round(t.from*DEPOSIT);
+  calcOut.innerHTML=`<span>Starting price</span><b>${$$(t.from)}</b><span>50% deposit to start</span><b>${$$(dep)}</b><span>Est. shipping</span><b>~${$$(t.ship)}</b><span class="tot">Est. total</span><span class="tot">~${$$(t.from+t.ship)}</span>`;
+}
+calcSel.onchange=calc;calc();
 
 /* ---------- window manager ---------- */
 const isPhone=()=>matchMedia('(max-width:820px)').matches;
