@@ -32,7 +32,6 @@ html,body{margin:0;height:100%}
 body{background:var(--desktop);color:var(--text);font:14px/1.5 var(--sys);overflow:hidden;-webkit-font-smoothing:antialiased}
 button,input,select,textarea{font:inherit;color:inherit}
 img{display:block;max-width:100%}
-.gem-cut{clip-path:polygon(6px 0,calc(100% - 6px) 0,100% 6px,100% calc(100% - 6px),calc(100% - 6px) 100%,6px 100%,0 calc(100% - 6px),0 6px)}
 [hidden]{display:none!important}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 :focus-visible{outline:1px dotted #000;outline-offset:-4px}
@@ -79,6 +78,9 @@ img{display:block;max-width:100%}
 .btn:focus-visible{outline:1px dotted #000;outline-offset:-6px}
 .btn.primary{background:var(--jade-deep);color:#fff;box-shadow:inset -1px -1px #06221e,inset 1px 1px #7fd3c5,inset -2px -2px #14524a,inset 2px 2px #3aa898}
 .btn.primary:active{box-shadow:inset 1px 1px #06221e,inset -1px -1px #7fd3c5,inset 2px 2px #14524a}
+/* gem-cut sits after .btn so its all:unset can't wipe the clip-path */
+.gem-cut{--c:10px;clip-path:polygon(var(--c) 0,calc(100% - var(--c)) 0,100% var(--c),100% calc(100% - var(--c)),calc(100% - var(--c)) 100%,var(--c) 100%,0 calc(100% - var(--c)),0 var(--c))}
+.gem-cut.sm{--c:6px}
 .reassure{font-size:12px;color:#444;margin:6px 0 0}
 
 /* type */
@@ -147,7 +149,7 @@ input:focus,select:focus,textarea:focus{outline:1px dotted var(--jade-deep);outl
 
 /* ---------- taskbar ---------- */
 #taskbar{position:fixed;left:0;right:0;bottom:0;height:calc(var(--tb) + env(safe-area-inset-bottom,0px));padding-bottom:env(safe-area-inset-bottom,0px)!important;background:var(--face);box-shadow:inset 0 1px var(--light),inset 0 2px var(--hilite);display:flex;align-items:center;gap:4px;padding:3px 3px 2px;z-index:50}
-#start{all:unset;cursor:pointer;display:flex;align-items:center;gap:5px;height:30px;padding:0 10px 0 6px;background:var(--face);box-shadow:var(--raised);font:700 15px/1 var(--pixel)}
+#start{all:unset;clip-path:polygon(6px 0,calc(100% - 6px) 0,100% 6px,100% calc(100% - 6px),calc(100% - 6px) 100%,6px 100%,0 calc(100% - 6px),0 6px);cursor:pointer;display:flex;align-items:center;gap:5px;height:30px;padding:0 10px 0 6px;background:var(--face);box-shadow:var(--raised);font:700 15px/1 var(--pixel)}
 #start[aria-expanded="true"]{box-shadow:var(--pressed)}
 #start svg{width:22px;height:22px;shape-rendering:crispEdges}
 .sep{width:2px;height:28px;box-shadow:inset 1px 0 var(--shadow),inset -1px 0 var(--hilite);margin:0 2px}
@@ -351,7 +353,7 @@ input:focus,select:focus,textarea:focus{outline:1px dotted var(--jade-deep);outl
 </div>
 
 <footer id="taskbar">
-  <button id="start" class="gem-cut" aria-haspopup="menu" aria-expanded="false" aria-controls="startmenu"><svg data-px="gem"></svg>Start</button>
+  <button id="start" class="gem-cut sm"aria-haspopup="menu" aria-expanded="false" aria-controls="startmenu"><svg data-px="gem"></svg>Start</button>
   <div class="sep" aria-hidden="true"></div>
   <div id="tasks" aria-label="Open windows"></div>
   <div id="tray"><a class="ig" href="https://instagram.com/tuftassjade" target="_blank" rel="noopener">@tuftassjade</a><time id="clock"></time></div>
