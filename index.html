@@ -267,15 +267,13 @@ input,textarea{cursor:text!important}
     <div class="menubar" aria-hidden="true"><span>File</span><span>Edit</span><span>View</span><span>Help</span></div>
     <div class="body" style="padding-top:2px">
       <div class="tabs" role="tablist" aria-label="Rug folders">
-        <button class="tab" role="tab" aria-selected="true" aria-controls="p-brand" id="tab-brand">Brand Logos</button>
-        <button class="tab" role="tab" aria-selected="false" aria-controls="p-comm" id="tab-comm" tabindex="-1">Commissions</button>
+        <button class="tab" role="tab" aria-selected="true" aria-controls="p-comm" id="tab-comm">Commissions</button>
       </div>
       <div class="panel">
-        <div class="grid" id="p-brand" role="tabpanel" aria-labelledby="tab-brand"></div>
-        <div class="grid" id="p-comm" role="tabpanel" aria-labelledby="tab-comm" hidden></div>
+        <div class="grid" id="p-comm" role="tabpanel" aria-labelledby="tab-comm"></div>
       </div>
     </div>
-    <div class="statusbar"><span id="g-count">3 object(s)</span><span>Click a rug to open it</span></div>
+    <div class="statusbar"><span id="g-count">6 object(s)</span><span>Click a rug to open it</span></div>
   </section>
 
   <!-- Viewer -->
@@ -436,22 +434,19 @@ document.querySelectorAll('svg[data-px]').forEach(s=>{s.setAttribute('viewBox','
 
 /* ---------- gallery data ---------- */
 const RUGS={
-  brand:[
-    {f:'brand-107.jpg',t:'107',c:'Brand logo rug · gothic lettering in lime, white and black',alt:"Charcoal rug with a gothic '107' logo in lime green, white and black"},
-    {f:'brand-3-cross.jpg',t:'3 + Cross',c:'Brand logo rug · custom commission',alt:'Black number 3 rug with a lime green cross through it'},
-    {f:'brand-3-cross-detail.jpg',t:'3 + Cross (detail)',c:'Close-up of the pile and the clean outline',alt:'Close-up of the 3 and cross rug showing the tufted pile'}
-  ],
   comm:[
     {f:'fleur-de-lis.jpg',t:'Fleur-de-lis',c:'New Orleans · custom shaped rug',alt:'Gold, black and white fleur-de-lis rug on a sidewalk'},
     {f:'character-rug.jpg',t:'Character rug',c:'Custom commission',alt:'White cartoon cat character rug with a red bow and blue overalls'},
-    {f:'commission-lineup.jpg',t:'The lineup',c:'Three commissions, one hallway',alt:'Three rugs on a tile floor: a ghost mask on pink, a blue alien character, and a red heart with orange lettering'}
+    {f:'commission-lineup.jpg',t:'The lineup',c:'Three commissions, one hallway',alt:'Three rugs on a tile floor: a ghost mask on pink, a blue alien character, and a red heart with orange lettering'},
+    {f:'brand-107.jpg',t:'107',c:'Brand logo rug · gothic lettering in lime, white and black',alt:"Charcoal rug with a gothic '107' logo in lime green, white and black"},
+    {f:'brand-3-cross.jpg',t:'3 + Cross',c:'Brand logo rug · custom commission',alt:'Black number 3 rug with a lime green cross through it'},
+    {f:'brand-3-cross-detail.jpg',t:'3 + Cross (detail)',c:'Close-up of the pile and the clean outline',alt:'Close-up of the 3 and cross rug showing the tufted pile'}
   ]
 };
 let current=[],idx=0;
 function renderGrid(key,el){
   el.innerHTML=RUGS[key].map((r,i)=>`<button class="thumb" data-k="${key}" data-i="${i}"><span class="ph"><img loading="lazy" src="img/${r.f}" alt="${r.alt}" onerror="this.parentElement.textContent='Photo coming soon'"></span><span class="fn">${r.f}</span><small>${r.t}</small></button>`).join('');
 }
-renderGrid('brand',document.getElementById('p-brand'));
 renderGrid('comm',document.getElementById('p-comm'));
 document.querySelectorAll('.thumb').forEach(b=>b.addEventListener('click',()=>{current=RUGS[b.dataset.k];idx=+b.dataset.i;showRug();openWin('w-viewer')}));
 function showRug(){const r=current[idx];const im=document.getElementById('v-img');im.src='img/'+r.f;im.alt=r.alt;document.getElementById('v-cap').textContent=`${r.t} · ${r.c}`;document.getElementById('t-viewer').textContent=`${r.f} - Rug Viewer`}
@@ -460,7 +455,7 @@ document.getElementById('v-next').onclick=()=>{idx=(idx+1)%current.length;showRu
 
 /* tabs */
 const tabs=[...document.querySelectorAll('.tab')];
-function selectTab(t){tabs.forEach(x=>{const on=x===t;x.setAttribute('aria-selected',on);x.tabIndex=on?0:-1;document.getElementById(x.getAttribute('aria-controls')).hidden=!on});document.getElementById('g-count').textContent=`${RUGS[t.id==='tab-brand'?'brand':'comm'].length} object(s)`}
+function selectTab(t){tabs.forEach(x=>{const on=x===t;x.setAttribute('aria-selected',on);x.tabIndex=on?0:-1;document.getElementById(x.getAttribute('aria-controls')).hidden=!on});document.getElementById('g-count').textContent=`${RUGS.comm.length} object(s)`}
 tabs.forEach((t,i)=>{t.onclick=()=>selectTab(t);t.onkeydown=e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'){const n=tabs[(i+(e.key==='ArrowRight'?1:-1)+tabs.length)%tabs.length];selectTab(n);n.focus()}}});
 
 /* ---------- window manager ---------- */
