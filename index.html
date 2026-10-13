@@ -218,6 +218,24 @@ input,textarea{cursor:text!important}
 .pcustom{display:flex;align-items:center;gap:6px;font-size:12px}
 .pcustom input{width:34px;min-height:0;height:26px;padding:0;border:0;background:var(--face);box-shadow:var(--raised)}
 
+/* ---------- games ---------- */
+.gtiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:12px;background:var(--field);box-shadow:var(--sunken);padding:14px}
+.gtile{all:unset;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;padding:6px 2px;font-size:13px}
+.gtile svg{width:44px;height:44px;shape-rendering:crispEdges}
+.gtile:hover span,.gtile:focus-visible span{background:var(--jade-deep);color:#fff}
+.gtile:focus-visible{outline:none}
+.gtile span{padding:1px 4px}
+.win[data-game] .gbody{min-height:40px}
+.tjg{font:13px/1.3 var(--sys);color:#111}
+.gbar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:6px}
+.gbar .btn{padding:4px 10px;min-height:30px;font-size:13px}
+.gbar .btn:disabled{color:var(--shadow);text-shadow:1px 1px 0 var(--hilite)}
+.gbar .gsp{flex:1}
+.gbar label{display:flex;align-items:center;gap:6px;font-size:12px}
+.gbar input[type=number]{width:84px;min-height:28px;padding:3px 6px}
+.gstat{display:flex;gap:2px;margin-top:6px;font-size:12px}
+.gstat span{box-shadow:var(--sunken);padding:2px 8px;flex:1;min-height:20px}
+
 /* ---------- phones: same windows, stacked and scrollable ---------- */
 @media (max-width:820px){
   body{overflow:auto;height:auto}
@@ -239,6 +257,10 @@ input,textarea{cursor:text!important}
   #w-viewer .tbtns{display:flex}
   #w-viewer .body{overflow:auto}
   #tasks{display:none}
+  .win[data-game]:not(.open){display:none}
+  .win[data-game] .tbtns{display:flex}
+  .win[data-game] [data-min],.win[data-game] [data-max]{display:none}
+  .win[data-game] .body{overflow:auto}
   .paint-main{flex-direction:column}
   .ptools{grid-template-columns:repeat(8,1fr);width:100%}
   .ptool{width:100%;height:38px}
@@ -263,6 +285,7 @@ input,textarea{cursor:text!important}
     <button class="icon" data-open="w-order"><svg data-px="rug"></svg><span>Custom Order</span></button>
     <button class="icon" data-open="w-about"><svg data-px="card"></svg><span>About Jade</span></button>
     <button class="icon" data-open="w-paint"><svg data-px="paint"></svg><span>Paint</span></button>
+    <button class="icon" data-open="w-games"><svg data-px="solitaire"></svg><span>Games</span></button>
     <button class="icon" data-open="w-contact"><svg data-px="mail"></svg><span>Contact</span></button>
   </nav>
 
@@ -419,6 +442,57 @@ input,textarea{cursor:text!important}
       <div class="statusbar"><span>Sketch your rug idea, save it, then DM it to @tuftassjade.</span><span id="p-xy">0, 0</span></div>
     </div>
   </section>
+
+  <!-- Games folder -->
+  <section class="win" id="w-games" aria-labelledby="t-games" data-icon="solitaire" data-w="480" data-h="0">
+    <div class="titlebar"><svg data-px="solitaire"></svg><span class="t" id="t-games">C:\Tuft Ass Jade\Games</span>
+      <div class="tbtns"><button class="tbtn" data-min aria-label="Minimize"><svg viewBox="0 0 8 7"><rect x="1" y="5" width="6" height="2"/></svg></button><button class="tbtn" data-max aria-label="Maximize"><svg viewBox="0 0 8 7"><path d="M0 0h8v7H0zM1 2v4h6V2z" fill-rule="evenodd"/></svg></button><button class="tbtn x" data-close aria-label="Close"><svg viewBox="0 0 8 7"><path d="M0 0h2v1h1v1h2V1h1V0h2v1H7v1H6v1H5v1h1v1h1v1h1v1H6V6H5V5H3v1H2v1H0V6h1V5h1V4h1V3H2V2H1V1H0z"/></svg></button></div>
+    </div>
+    <div class="body">
+      <div class="gtiles"><button class="gtile" data-open="w-minesweeper"><svg data-px="mine"></svg><span>Minesweeper</span></button><button class="gtile" data-open="w-solitaire"><svg data-px="solitaire"></svg><span>Solitaire</span></button><button class="gtile" data-open="w-freecell"><svg data-px="freecell"></svg><span>FreeCell</span></button><button class="gtile" data-open="w-hearts"><svg data-px="hearts"></svg><span>Hearts</span></button><button class="gtile" data-open="w-pinball"><svg data-px="pinball"></svg><span>Pinball</span></button></div>
+      <div class="statusbar"><span>5 object(s)</span><span>Take a break</span></div>
+    </div>
+  </section>
+
+  <!-- Minesweeper -->
+  <section class="win" id="w-minesweeper" aria-labelledby="t-minesweeper" data-icon="mine" data-w="320" data-h="0" data-game="minesweeper">
+    <div class="titlebar"><svg data-px="mine"></svg><span class="t" id="t-minesweeper">Minesweeper</span>
+      <div class="tbtns"><button class="tbtn" data-min aria-label="Minimize"><svg viewBox="0 0 8 7"><rect x="1" y="5" width="6" height="2"/></svg></button><button class="tbtn" data-max aria-label="Maximize"><svg viewBox="0 0 8 7"><path d="M0 0h8v7H0zM1 2v4h6V2z" fill-rule="evenodd"/></svg></button><button class="tbtn x" data-close aria-label="Close"><svg viewBox="0 0 8 7"><path d="M0 0h2v1h1v1h2V1h1V0h2v1H7v1H6v1H5v1h1v1h1v1h1v1H6V6H5V5H3v1H2v1H0V6h1V5h1V4h1V3H2V2H1V1H0z"/></svg></button></div>
+    </div>
+    <div class="body"><div class="gbody"></div></div>
+  </section>
+
+  <!-- Solitaire -->
+  <section class="win" id="w-solitaire" aria-labelledby="t-solitaire" data-icon="solitaire" data-w="560" data-h="0" data-game="solitaire" data-needs="cards">
+    <div class="titlebar"><svg data-px="solitaire"></svg><span class="t" id="t-solitaire">Solitaire</span>
+      <div class="tbtns"><button class="tbtn" data-min aria-label="Minimize"><svg viewBox="0 0 8 7"><rect x="1" y="5" width="6" height="2"/></svg></button><button class="tbtn" data-max aria-label="Maximize"><svg viewBox="0 0 8 7"><path d="M0 0h8v7H0zM1 2v4h6V2z" fill-rule="evenodd"/></svg></button><button class="tbtn x" data-close aria-label="Close"><svg viewBox="0 0 8 7"><path d="M0 0h2v1h1v1h2V1h1V0h2v1H7v1H6v1H5v1h1v1h1v1h1v1H6V6H5V5H3v1H2v1H0V6h1V5h1V4h1V3H2V2H1V1H0z"/></svg></button></div>
+    </div>
+    <div class="body"><div class="gbody"></div></div>
+  </section>
+
+  <!-- FreeCell -->
+  <section class="win" id="w-freecell" aria-labelledby="t-freecell" data-icon="freecell" data-w="600" data-h="0" data-game="freecell" data-needs="cards">
+    <div class="titlebar"><svg data-px="freecell"></svg><span class="t" id="t-freecell">FreeCell</span>
+      <div class="tbtns"><button class="tbtn" data-min aria-label="Minimize"><svg viewBox="0 0 8 7"><rect x="1" y="5" width="6" height="2"/></svg></button><button class="tbtn" data-max aria-label="Maximize"><svg viewBox="0 0 8 7"><path d="M0 0h8v7H0zM1 2v4h6V2z" fill-rule="evenodd"/></svg></button><button class="tbtn x" data-close aria-label="Close"><svg viewBox="0 0 8 7"><path d="M0 0h2v1h1v1h2V1h1V0h2v1H7v1H6v1H5v1h1v1h1v1h1v1H6V6H5V5H3v1H2v1H0V6h1V5h1V4h1V3H2V2H1V1H0z"/></svg></button></div>
+    </div>
+    <div class="body"><div class="gbody"></div></div>
+  </section>
+
+  <!-- Hearts -->
+  <section class="win" id="w-hearts" aria-labelledby="t-hearts" data-icon="hearts" data-w="640" data-h="0" data-game="hearts" data-needs="cards">
+    <div class="titlebar"><svg data-px="hearts"></svg><span class="t" id="t-hearts">Hearts</span>
+      <div class="tbtns"><button class="tbtn" data-min aria-label="Minimize"><svg viewBox="0 0 8 7"><rect x="1" y="5" width="6" height="2"/></svg></button><button class="tbtn" data-max aria-label="Maximize"><svg viewBox="0 0 8 7"><path d="M0 0h8v7H0zM1 2v4h6V2z" fill-rule="evenodd"/></svg></button><button class="tbtn x" data-close aria-label="Close"><svg viewBox="0 0 8 7"><path d="M0 0h2v1h1v1h2V1h1V0h2v1H7v1H6v1H5v1h1v1h1v1h1v1H6V6H5V5H3v1H2v1H0V6h1V5h1V4h1V3H2V2H1V1H0z"/></svg></button></div>
+    </div>
+    <div class="body"><div class="gbody"></div></div>
+  </section>
+
+  <!-- Pinball -->
+  <section class="win" id="w-pinball" aria-labelledby="t-pinball" data-icon="pinball" data-w="440" data-h="0" data-game="pinball">
+    <div class="titlebar"><svg data-px="pinball"></svg><span class="t" id="t-pinball">Pinball</span>
+      <div class="tbtns"><button class="tbtn" data-min aria-label="Minimize"><svg viewBox="0 0 8 7"><rect x="1" y="5" width="6" height="2"/></svg></button><button class="tbtn" data-max aria-label="Maximize"><svg viewBox="0 0 8 7"><path d="M0 0h8v7H0zM1 2v4h6V2z" fill-rule="evenodd"/></svg></button><button class="tbtn x" data-close aria-label="Close"><svg viewBox="0 0 8 7"><path d="M0 0h2v1h1v1h2V1h1V0h2v1H7v1H6v1H5v1h1v1h1v1h1v1H6V6H5V5H3v1H2v1H0V6h1V5h1V4h1V3H2V2H1V1H0z"/></svg></button></div>
+    </div>
+    <div class="body"><div class="gbody"></div></div>
+  </section>
 </main>
 
 <!-- Start menu -->
@@ -430,6 +504,7 @@ input,textarea{cursor:text!important}
     <li><button role="menuitem" data-open="w-about"><svg data-px="card"></svg>About Jade</button></li>
     <li><button role="menuitem" data-open="w-contact"><svg data-px="mail"></svg>Contact</button></li>
     <li><button role="menuitem" data-open="w-paint"><svg data-px="paint"></svg>Paint</button></li>
+    <li><button role="menuitem" data-open="w-games"><svg data-px="solitaire"></svg>Games</button></li>
     <li><hr></li>
     <li><a role="menuitem" href="https://instagram.com/tuftassjade" target="_blank" rel="noopener"><svg data-px="gem"></svg>@tuftassjade</a></li>
     <li><hr></li>
@@ -491,7 +566,17 @@ const PX={
   mail:{p:{k:'#1b1712',w:'#ffffff',f:'#e6e6e6',j:'#3aa898'},m:[
   "................","................","................",".kkkkkkkkkkkkkk.",".kwkffffffffkwk.",".kwwkffffffkwwk.",".kwwwkffffkwwwk.",".kwwwwkjjkwwwwk.",".kwwwwwkkwwwwwk.",".kwwwwwwwwwwwwk.",".kwwwwwwwwwwwwk.",".kwwwwwwwwwwwwk.",".kkkkkkkkkkkkkk.","................","................","................"]},
   paint:{p:{k:'#3b2f12',y:'#e0b872',r:'#c0392b',g:'#3aa898',b:'#2a5fb0'},m:[
-  "................","................",".....kkkkkkk....","...kkyyyyyyykk..","..kyyyyyyyyyyyk.",".kyyrrryyyyyyyk.",".kyyrrryyggyyyk.",".kyyyyyyyggyyyk.",".kybbyyyyyyyyyk.","..kyyyyyyyyyykk.","...kkyyyyyyyyk..",".....kkkkkkkkk..","................","................","................","................"]}
+  "................","................",".....kkkkkkk....","...kkyyyyyyykk..","..kyyyyyyyyyyyk.",".kyyrrryyyyyyyk.",".kyyrrryyggyyyk.",".kyyyyyyyggyyyk.",".kybbyyyyyyyyyk.","..kyyyyyyyyyykk.","...kkyyyyyyyyk..",".....kkkkkkkkk..","................","................","................","................"]},
+  mine:{p:{k:'#111111',w:'#ffffff',r:'#c0392b',y:'#f6d84a'},m:[
+  "................","........yr......","........k.......","..k....kkk...k..","...k.kkkkkkk.k..","....kkwwkkkkk...","..kkkwwkkkkkkkk.","...kkkkkkkkkkk..","..kkkkkkkkkkkkk.","...kkkkkkkkkkk..","....kkkkkkkkk...","...k.kkkkkkk.k..","..k....kkk...k..","................","................","................"]},
+  solitaire:{p:{k:'#111111',w:'#ffffff'},m:[
+  "................","..kkkkkkkkkkkk..","..kwwwwwwwwwwk..","..kwwwwkkwwwwk..","..kwwwkkkkwwwk..","..kwwkkkkkkwwk..","..kwkkkkkkkkwk..","..kwkkkkkkkkwk..","..kwwkkkwwkwwk..","..kwwwwkkwwwwk..","..kwwwkkkkwwwk..","..kwwwwwwwwwwk..","..kkkkkkkkkkkk..","................","................","................"]},
+  freecell:{p:{k:'#111111',w:'#ffffff',r:'#c0392b'},m:[
+  "................","..kkkkkkkkkkkk..","..kwwwwwwwwwwk..","..kwwwwrrwwwwk..","..kwwwrrrrwwwk..","..kwwrrrrrrwwk..","..kwrrrrrrrrwk..","..kwwrrrrrrwwk..","..kwwwrrrrwwwk..","..kwwwwrrwwwwk..","..kwwwwwwwwwwk..","..kwwwwwwwwwwk..","..kkkkkkkkkkkk..","................","................","................"]},
+  hearts:{p:{k:'#111111',w:'#ffffff',r:'#c0392b'},m:[
+  "................","..kkkkkkkkkkkk..","..kwwwwwwwwwwk..","..kwwrrwwrrwwk..","..kwrrrrrrrrwk..","..kwrrrrrrrrwk..","..kwwrrrrrrwwk..","..kwwwrrrrwwwk..","..kwwwwrrwwwwk..","..kwwwwwwwwwwk..","..kwwwwwwwwwwk..","..kwwwwwwwwwwk..","..kkkkkkkkkkkk..","................","................","................"]},
+  pinball:{p:{k:'#111111',g:'#9a9a9a',s:'#d8d8d8',w:'#ffffff',j:'#3aa898',r:'#c0392b',y:'#d4af77'},m:[
+  "................","kkkkkkkkkkkkkkk.","kjjjjjjjjjjjjjk.","kjjjrrjjjyyjjjk.","kjjrrrrjjyyjjjk.","kjjjrrjjjjjjjjk.","kjjjjjkkkkjjjjk.","kjjjjkswsgkjjjk.","kjjjjksssgkjjjk.","kjjjjkggggkjjjk.","kjjjjjkkkkjjjjk.","kjkkjjjjjjjkkjk.","kkkjjkjjjjkjjkk.","................","................","................"]}
 };
 function pxSVG(name){const d=PX[name];let r='';d.m.forEach((row,y)=>[...row].forEach((c,x)=>{if(d.p[c])r+=`<rect x="${x}" y="${y}" width="1" height="1" fill="${d.p[c]}"/>`}));return r}
 document.querySelectorAll('svg[data-px]').forEach(s=>{s.setAttribute('viewBox','0 0 16 16');s.setAttribute('aria-hidden','true');s.innerHTML=pxSVG(s.dataset.px)});
@@ -556,10 +641,11 @@ function place(w){
 function openWin(id){
   const w=document.getElementById(id);if(!w)return;
   closeStart();
-  if(isPhone()&&id!=='w-viewer'){const v=document.getElementById('w-viewer');v.classList.remove('open','active');w.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth',block:'start'});return}
+  if(isPhone()&&id!=='w-viewer'&&!w.dataset.game){const v=document.getElementById('w-viewer');v.classList.remove('open','active');w.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth',block:'start'});return}
   place(w);
   if(!w.classList.contains('open')){w.classList.add('open','opening');setTimeout(()=>w.classList.remove('opening'),200)}
   w.dataset.min='';focusWin(w);
+  if(isPhone()&&w.dataset.game)w.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth',block:'start'});
   if(id==='w-viewer')w.querySelector('#v-next').focus({preventScroll:true});
 }
 function closeWin(w){w.classList.remove('open','active','max');syncTasks();const top=wins.filter(x=>x.classList.contains('open')).sort((a,b)=>b.style.zIndex-a.style.zIndex)[0];if(top&&!isPhone())focusWin(top)}
@@ -767,6 +853,21 @@ restartBtn.onclick=()=>{offEl.classList.remove('open');startBtn.focus()};
   const end=()=>{drawing=false;snap=null};
   cv.addEventListener('pointerup',end);cv.addEventListener('pointercancel',end);
 })();
+
+/* ---------- games (lazy loaded) ---------- */
+window.TJGames=window.TJGames||{};
+const gjs={};
+function loadJS(src){return gjs[src]||(gjs[src]=new Promise((res,rej)=>{const t=document.createElement('script');t.src=src;t.onload=res;t.onerror=()=>{delete gjs[src];rej(new Error(src))};document.head.appendChild(t)}))}
+function bootGame(w){
+  if(w.dataset.booted)return;w.dataset.booted='1';
+  const name=w.dataset.game,root=w.querySelector('.gbody');
+  root.textContent='Loading\u2026';
+  (w.dataset.needs?loadJS('games/'+w.dataset.needs+'.js'):Promise.resolve())
+    .then(()=>loadJS('games/'+name+'.js'))
+    .then(()=>{root.textContent='';window.TJGames[name].init(root,w)})
+    .catch(()=>{w.dataset.booted='';root.textContent='Could not load this game. Check your connection and open it again.'});
+}
+document.querySelectorAll('[data-open]').forEach(b=>b.addEventListener('click',()=>{const w=document.getElementById(b.dataset.open);if(w&&w.dataset.game)bootGame(w)}));
 </script>
 </body>
 </html>
